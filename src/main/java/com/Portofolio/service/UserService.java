@@ -13,6 +13,8 @@ public interface UserService {
     Users getByEmail(String email);
 
     Claims getUserByJwt(String token);
+
+    Users addUser(Users users);
 //
 //    UsersDTO LoginRequestChecker(LoginRequest loginRequest);
 }

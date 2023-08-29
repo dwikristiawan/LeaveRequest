@@ -58,6 +58,11 @@ public class UserServiceImpl implements UserService{
         return claims;
     }
 
+    @Override
+    public Users addUser(Users users) {
+        return userRepository.save(users);
+    }
+
 //    @Override
 //    public UsersDTO LoginRequestChecker(LoginRequest loginRequest) {
 //        UsersDTO usersDTO=new UsersDTO();

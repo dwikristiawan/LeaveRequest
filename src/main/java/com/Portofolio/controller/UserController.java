@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/user")
@@ -69,16 +70,36 @@ public class UserController {
                 .body("Login Success");
     }
     @GetMapping("/profile")
-    Users showProfile(@RequestHeader("Authorization") String auth){
-        String token=auth.substring("Bearer ".length());
-        Users users =userService.getByEmail( jwtUtils.extractUsername(token));
-        //ProfileDTO profileDTO=mapp.usersToProfileDto(users);
-        return  users;
-
+    ResponseEntity showProfile(@RequestHeader("Authorization") String auth){
+        try {
+            String token = auth.substring("Bearer ".length());
+            Users users = userService.getByEmail(jwtUtils.extractUsername(token));
+            ProfileDTO profileDTO = mapp.usersToProfileDto(users);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(profileDTO);
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e);
+        }
     }
-    @PostMapping("/update-profile")
-    void updateProfile(@RequestBody ProfileDTO updateProfileRequest){
-
+    @PutMapping("/update-profile")
+    ResponseEntity updateProfile(@RequestBody(required = true) ProfileDTO updateProfileRequest,@RequestHeader("Authorization") String auth) throws ParseException {
+        try {
+            String token = auth.substring("Bearer ".length());
+            Users users = userService.getByEmail(jwtUtils.extractUsername(token));
+            users = mapp.profilDtoToUsers(updateProfileRequest, users);
+            users.setComplated(true);
+            users = userService.addUser(users);
+            ProfileDTO profileDTO=mapp.usersToProfileDto(users);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(profileDTO);
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e);
+        }
     }
 
 }

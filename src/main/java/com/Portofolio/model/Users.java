@@ -22,6 +22,7 @@ public class Users {
     private String password;
     private  String telpon;
     private String gender;
+    @Temporal(TemporalType.DATE)
     private Date birth;
     private String address;
     private Boolean complated;

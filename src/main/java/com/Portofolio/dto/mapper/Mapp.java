@@ -2,14 +2,15 @@ package com.Portofolio.dto.mapper;
 
 import com.Portofolio.dto.ProfileDTO;
 import com.Portofolio.dto.RegisterRequest;
-import com.Portofolio.dto.RoleDTO;
 import com.Portofolio.dto.UsersDTO;
-import com.Portofolio.model.Roles;
 import com.Portofolio.model.Users;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Component
 public class Mapp {
     public UsersDTO usersToDTO(Users users){
@@ -26,11 +27,28 @@ public class Mapp {
         ProfileDTO profileDTO=new ProfileDTO();
         profileDTO.setUsername(users.getUsername());
         profileDTO.setEmail(users.getEmail());
-        profileDTO.setBirth(users.getBirth().toString());
+        String strDate=null;
+        if (users.getBirth()!=null){
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            strDate=dateFormat.format(users.getBirth());
+        }
+        profileDTO.setBirth(strDate);
         profileDTO.setGender(users.getGender());
         profileDTO.setTelpon(users.getTelpon());
         profileDTO.setAddress(users.getAddress());
         return profileDTO;
+    }
+    public Users profilDtoToUsers(ProfileDTO profileDTO,Users users) throws ParseException {
+        users.setUsername(profileDTO.getUsername());
+        users.setEmail(profileDTO.getEmail());
+        users.setTelpon(profileDTO.getTelpon());
+        users.setGender(profileDTO.getGender());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = dateFormat.parse(profileDTO.getBirth());
+        users.setBirth(date);
+        users.setAddress(profileDTO.getAddress());
+        return users;
+
     }
 
 //    public Collection<RoleDTO> RoleToDTO(Roles roles){
