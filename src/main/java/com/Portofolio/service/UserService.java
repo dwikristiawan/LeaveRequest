@@ -11,6 +11,7 @@ public interface UserService {
     String register(RegisterRequest registerDto);
     boolean isEmailExist(String email);
     Users getByEmail(String email);
+    Users getByName(String name);
 
     Claims getUserByJwt(String token);
 

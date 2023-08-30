@@ -1,9 +1,11 @@
 package com.Portofolio.dto.mapper;
 
-import com.Portofolio.dto.ProfileDTO;
-import com.Portofolio.dto.RegisterRequest;
-import com.Portofolio.dto.UsersDTO;
+import com.Portofolio.dto.*;
+import com.Portofolio.model.UserRoleAproval;
 import com.Portofolio.model.Users;
+import com.Portofolio.service.DepartmentService;
+import com.Portofolio.service.ManagerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
@@ -13,6 +15,10 @@ import java.util.Date;
 
 @Component
 public class Mapp {
+    @Autowired
+    DepartmentService departmentService;
+    @Autowired
+    ManagerService managerService;
     public UsersDTO usersToDTO(Users users){
         UsersDTO usersDTO=new UsersDTO();
         usersDTO.setId(users.getId());
@@ -64,5 +70,11 @@ public class Mapp {
         users.setEmail(registerDto.getEmail());
         users.setPassword(registerDto.getPassword());
         return users;
+    }
+    public UserRoleAproval userAprovalToUserAproval(RequestUsersRoleDTO requestUsersRoleDTO){
+        UserRoleAproval userRoleAproval=new UserRoleAproval();
+        userRoleAproval.setDepartment(departmentService.getByName(requestUsersRoleDTO.getDepartment()));
+        userRoleAproval.setManager(managerService.getByName(requestUsersRoleDTO.getManager()));
+        return userRoleAproval;
     }
 }

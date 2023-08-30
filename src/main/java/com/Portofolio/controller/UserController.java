@@ -3,7 +3,9 @@ package com.Portofolio.controller;
 import com.Portofolio.dto.LoginRequest;
 import com.Portofolio.dto.RegisterRequest;
 import com.Portofolio.dto.ProfileDTO;
+import com.Portofolio.dto.RequestUsersRoleDTO;
 import com.Portofolio.dto.mapper.Mapp;
+import com.Portofolio.model.UserRoleAproval;
 import com.Portofolio.model.Users;
 import com.Portofolio.service.UserService;
 import com.Portofolio.util.JwtUtils;
@@ -60,8 +62,12 @@ public class UserController {
     @PostMapping("/auth/login")
     ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws Exception {
         try {
+//            if(!userService.isEmailExist(loginRequest.getEmail())){
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid username or password");
+//            }
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
         }catch (BadCredentialsException e){ throw new Exception("Invalid username or password",e);}
+
         final UserDetails userDetails=userDetailsService.loadUserByUsername(loginRequest.getEmail());
         final String token=jwtUtils.generateToken(userDetails);
         Cookie cookie=new Cookie("jwt",token);
@@ -101,5 +107,8 @@ public class UserController {
                     .body(e);
         }
     }
+
+
+
 
 }

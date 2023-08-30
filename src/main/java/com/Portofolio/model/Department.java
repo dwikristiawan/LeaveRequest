@@ -11,9 +11,9 @@ import javax.persistence.Id;
 @Setter
 @Getter
 @Entity
-public class StatusAproval {
+public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String status;
+    Integer id;
+    String name;
 }

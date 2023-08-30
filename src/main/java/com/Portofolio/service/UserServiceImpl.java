@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Users getByName(String name) {
+        return userRepository.findByUsername(name);
+    }
+
+    @Override
     public Claims getUserByJwt(String token) {
         Claims claims= Jwts.claims();
         return claims;
